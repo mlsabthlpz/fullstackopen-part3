@@ -10,6 +10,10 @@
   },
   "author": "Melissa Lopez",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mlsabthlpz/fullstackopen-part3.git"
+  },
   "dependencies": {
     "express": "^4.17.1"
   },
