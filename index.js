@@ -1,12 +1,15 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+const Person = require('./models/person')
 
 app.use(express.json())
 app.use(express.static('build'))
 app.use(cors())
 
+/* Morgan logging */
 const showRequest = morgan.token('request-body', 
                       function (req, res) { return JSON.stringify(req.body)})
 
@@ -45,18 +48,21 @@ app.get('/info', (request, response) => {
   })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons => response.json(persons))
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
+  })
+  /* const id = Number(request.params.id)
   const person = persons.find(person => person.id === id)
 
   if (person) {
     response.json(person)
   } else {
     response.status(404).end()
-  }
+  } */
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -75,7 +81,7 @@ const generateId = () => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if (!body.name || !body.number) {
+  if (!body.name || !body.number ) {
     return response.status(400).json({ 
       error: 'information missing, must enter name and number' 
     })
@@ -87,15 +93,12 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const person = {
+  const person = new Person ({
     name: body.name,
-    number: body.number,
-    id: generateId(),
-  }
+    number: body.number
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
+  person.save().then(savedPerson => response.json(savedPerson))
 })
 
 const PORT = process.env.PORT || 3001
