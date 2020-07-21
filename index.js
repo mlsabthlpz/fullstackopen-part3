@@ -47,7 +47,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 // Delete phonebook entry
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => response.status(204).end())
+    .then(() => response.status(204).end())
     .catch(error => next(error))
 })
 
@@ -90,7 +90,7 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: 'malformatted id' })
   }
   if (error.name === 'ValidationError') {
-    return response.status(400).send({ error: error.message})
+    return response.status(400).send({ error: error.message })
   }
 
   next(error)
