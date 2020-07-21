@@ -55,16 +55,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
-  /*if ( !body.name || !body.number ) {
-<<<<<<< HEAD
-    return response.status(400).json({
-=======
-    return response.status(400).json({ 
->>>>>>> df8800a517b91708421cc04f764e798717d39f76
-      error: 'information missing, must enter name and number'
-    })
-  }*/
-
   const person = new Person ({
     name: body.name,
     number: body.number
@@ -72,11 +62,7 @@ app.post('/api/persons', (request, response, next) => {
 
   person.save()
     .then(savedPerson => response.json(savedPerson))
-<<<<<<< HEAD
     .catch(error => next(error))
-=======
-    .catch(error=> next(error))
->>>>>>> df8800a517b91708421cc04f764e798717d39f76
 })
 
 // Update phonebook entry
