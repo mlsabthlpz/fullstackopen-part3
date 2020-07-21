@@ -10,14 +10,13 @@ app.use(express.static('build'))
 app.use(cors())
 
 // Morgan logging
-const showRequest = morgan.token('request-body', 
-                      function (req, res) { return JSON.stringify(req.body)})
-
+morgan.token('request-body',
+  function (req) { return JSON.stringify(req.body)})
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :request-body'))
 
 app.get('/', (request, response) => {
-    response.send('<h2>Phonebook</h2>')
-  })
+  response.send('<h2>Phonebook</h2>')
+})
 
 // Get all phonebook entries from db
 app.get('/api/persons', (request, response) => {
@@ -57,7 +56,7 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   /*if ( !body.name || !body.number ) {
-    return response.status(400).json({ 
+    return response.status(400).json({
       error: 'information missing, must enter name and number'
     })
   }*/
@@ -69,7 +68,7 @@ app.post('/api/persons', (request, response, next) => {
 
   person.save()
     .then(savedPerson => response.json(savedPerson))
-    .catch(error=> next(error))
+    .catch(error => next(error))
 })
 
 // Update phonebook entry
@@ -95,10 +94,10 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  }
   if (error.name === 'ValidationError') {
-    return response.status(400).send({ error: 'Validation error: Name (unique, 3+ characters) and number (8+ characters) required' })
-  } 
+    return response.status(400).send({ error: error.message})
+  }
 
   next(error)
 }

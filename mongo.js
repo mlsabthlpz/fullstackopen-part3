@@ -13,8 +13,8 @@ const url =
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const personSchema = new mongoose.Schema({
-    person: String,
-    number: String
+  person: String,
+  number: String
 })
 
 const Person = mongoose.model('Person', personSchema)
@@ -25,7 +25,7 @@ if (process.argv.length === 3) {
     result.forEach(person => {
       console.log(person.person, person.number)
       mongoose.connection.close()
-      })
+    })
   })
 }
 
@@ -34,12 +34,12 @@ else {
   const number = process.argv[4]
 
   const person = new Person({
-  person: name,
-  number: number,
+    person: name,
+    number: number,
   })
 
   person.save().then(result => {
-  console.log(`Added ${name} number ${number} to phonebook`)
-  mongoose.connection.close()
+    console.log(`Added ${name} number ${number} to phonebook`)
+    mongoose.connection.close()
   })
 }
